@@ -1,0 +1,160 @@
+$main-color:#4b9bec;
+$sub-color:white;
+$text-title-color:black;
+$text-detai-color:#a2a2a2;
+
+$task-error-color:red;
+
+$init-color:#4b9bec;
+$running-color:#a9e251;
+$stopped-color:red;
+$executing-color:yellow;
+$completed-color:gray;
+
+
+$header-height:50px;
+
+@mixin trans($dt, $tf:linear){
+    transition: {
+        timing-function:$tf;
+        property:all;
+        duration:$dt;
+        delay:0s;
+    }
+}
+
+
+@mixin itemWithState($color){
+  border-left: solid 30px $color;
+  font-weight: 700;
+  color: $text-detai-color;
+  &:hover,&.active{
+    box-shadow: 0px 0px 20px 1px $color;
+    cursor: pointer;
+  }
+  &.error{
+    color: $task-error-color;
+  }
+}
+
+@mixin list-section{
+  display: inherit;
+  flex:1 1 50%;
+  flex-flow: column nowrap;
+  padding: 20px;
+  border-right: 1px #E6E6E6 solid;
+  min-height: 500px;
+
+  .taskItem{
+    border: solid 1px #adadad;
+    border-radius: 10px;
+    padding: 15px;
+    height: 50px;
+    margin-bottom: 10px;
+    @include trans(.5s);
+
+    &.init{
+      @include itemWithState($init-color)
+    }
+    &.running{
+      @include itemWithState($running-color)
+    }
+    &.stopped{
+      @include itemWithState($stopped-color)
+    }
+    &.executing{
+      @include itemWithState($executing-color)
+    }
+    &.completed{
+      @include itemWithState($completed-color)
+    }
+  }
+}
+
+@mixin detail-section{
+  display: inherit;
+  flex:1 1 50%;
+  padding: 20px;
+  flex-flow: column nowrap;
+
+  .title{
+    display: inherit;
+    flex-flow: row nowrap;
+    align-items: center;
+    font-size: 18px;
+    height: 30px;
+    border-left: $main-color 5px solid;
+    padding-left: 10px;
+  }
+
+  .text{
+    font-size: 22px;
+    padding: 20px;
+    color: $text-detai-color;
+  }
+}
+
+.btn{
+  color: #333;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid $main-color;
+  padding: 5px 15px;
+  margin: 0 10px;
+  background-color: #fff;
+  @include trans(.3s);
+  &:disabled{
+    opacity: .65;
+    
+    &:hover{
+      background-color: transparent;
+      color: inherit;
+      cursor: not-allowed;
+    }
+  }
+
+  &:hover{
+    background-color: $main-color;
+    color: $sub-color;
+    cursor: pointer;
+  }
+}
+
+body{
+  *{
+    box-sizing: border-box;
+  }
+
+  margin: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  font-family: 'Fruitiger','Helvetica','Futura';
+
+  header{
+    height: $header-height;
+    background-color: $main-color;
+    display: inherit;
+    align-items: center;
+    margin-bottom: 20px;
+
+    span{
+      color: $sub-color;
+      font-size: 20px;
+      padding-left: 30px;
+    }
+  }
+    
+
+  .container{
+    display: inherit;
+    flex-flow: row nowrap;
+    margin: 0 400px;
+    .list{
+      @include list-section()
+    }
+
+    .detail{
+      @include detail-section()
+    }
+  }
+}

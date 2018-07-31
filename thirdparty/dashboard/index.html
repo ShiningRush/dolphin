@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Dolphin Dashboard</title>
+    <link rel="stylesheet" href="./site.min.css">
+  </head>
+  <body>
+      <header>
+        <span>Dolphin Dashboard</span>
+      </header>
+      <div id="app" class="container">
+        <section class="list">
+          <div class="taskItem" :class="[aTask.taskState.toLowerCase(), { active: aTask.taskName == curTask.taskName }, { error: aTask.lastExecuteState == 'This task has something error, please check log' }]" v-for="aTask in taskList" @click="clickTask(aTask)">
+            <span>{{ aTask.taskName }}</span>
+          </div>
+        </section>
+        <section class="detail">
+          <div class="title">Task Name</div>
+          <div class="text">{{ curTask.taskName }}</div>
+          <div class="title">Task Type</div>
+          <div class="text">{{ curTask.taskType }}</div>
+          <div class="title">Plan Time</div>
+          <div class="text">{{ curTask.planTime }}</div>
+          <div class="title">Task State</div>
+          <div class="text">{{ curTask.taskState }}</div>
+          <div class="title">Last Executed At</div>
+          <div class="text">{{ curTask.lastExecuteTime }}</div>
+          <div class="title">Last Execute State</div>
+          <div class="text">{{ curTask.lastExecuteState }}</div>
+          <div class="title">Last Execute Cost</div>
+          <div class="text">{{ curTask.lastExecuteCost }}</div>
+          <div class="control">
+            <button class="btn" :disabled="isLoading" @click="clickStart">Start</button>
+            <button class="btn" :disabled="isLoading" @click="clickStop">Stop</button>
+            <button class="btn" :disabled="isLoading" @click="clickExecute">Execute</button>
+            <button class="btn" :disabled="isLoading" @click="clickReset">Reset</button>
+          </div>
+        </section>
+      </div>
+      <script src="./vue.min.js"></script>
+      <script src="./sweetalert.min.js"></script>
+      <script src="./site.js"></script>
+  </body>
+</html>
