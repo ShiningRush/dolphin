@@ -9,8 +9,8 @@ import (
 	"strconv"
 
 	"github.com/ShiningRush/dolphin"
+	"github.com/ShiningRush/dolphin/dist/dolphinui"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
-	"gitlab.followme.com/Followme/CRM-Report/dist/dolphinui"
 )
 
 // TaskStatus is return to web dashboard
