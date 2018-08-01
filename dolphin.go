@@ -14,6 +14,10 @@ func SetLog(log task.LogFunc) {
 	tm.SetLog(log)
 }
 
+func SetRepo(repo task.TaskStatusRepository) {
+	tm.SetRepo(repo)
+}
+
 // GetAllTasks in manager
 func GetAllTasks() map[string]*task.EtlTask {
 	return tm.GetAllTasks()
