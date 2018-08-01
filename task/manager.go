@@ -80,7 +80,9 @@ func (t *TaskManager) Execute(taskName string) error {
 		if tarTsk.State == Completed || tarTsk.State == Stopped || tarTsk.State == Executing {
 			return errors.New("Can not execute a unready task(running or init)")
 		}
-		go tarTsk.Execute()
+		if err := tarTsk.Execute(); err != nil {
+			t.log(Error, err.Error())
+		}
 	}
 	return nil
 }
@@ -114,7 +116,9 @@ func (t *TaskManager) dispatchTask() error {
 					return err
 				}
 			} else {
-				go v.Execute()
+				if err := v.Execute(); err != nil {
+					t.log(Error, err.Error())
+				}
 			}
 
 		}

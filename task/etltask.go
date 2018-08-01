@@ -45,7 +45,7 @@ type TaskStatus struct {
 // Batch interface
 type Batch interface {
 	GetName() string
-	Begin() error
+	Begin(t *EtlTask) error
 	Reset() error
 }
 
@@ -110,7 +110,7 @@ func (e *EtlTask) Execute() error {
 		allError = errors.New(errMsg)
 	}
 
-	if err := e.Batch.Begin(); err != nil {
+	if err := e.Batch.Begin(e); err != nil {
 		e.LastExecuteState = "This task has something error when beginning, please check log"
 		errMsg := "We get a error when begin batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
 		allError = errors.New(errMsg)
