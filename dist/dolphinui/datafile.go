@@ -76,6 +76,8 @@ var _thirdpartyDashboardIndexHtml = []byte(`<!DOCTYPE html>
           <div class="text">{{ curTask.planTime }}</div>
           <div class="title">Task State</div>
           <div class="text">{{ curTask.taskState }}</div>
+          <div class="title">Reset Before Begin</div>
+          <div class="text">{{ curTask.resetBeforeBegin }}</div>
           <div class="title">Last Executed At</div>
           <div class="text">{{ curTask.lastExecuteTime }}</div>
           <div class="title">Last Execute State</div>
@@ -107,7 +109,7 @@ func thirdpartyDashboardIndexHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "thirdparty/dashboard/index.html", size: 2089, mode: os.FileMode(438), modTime: time.Unix(1533005597, 0)}
+	info := bindataFileInfo{name: "thirdparty/dashboard/index.html", size: 2210, mode: os.FileMode(438), modTime: time.Unix(1533129258, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -313,14 +315,15 @@ var _thirdpartyDashboardSiteJs = []byte(`var app = new Vue({
   data: {
     isLoading:false,
     taskList: [
-      { taskName: "taskOne", taskType:"OneShot", taskState:"Running",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
-      { taskName: "taskTwo", taskType:"Plan", taskState:"Executing",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
-      { taskName: "taskThree", taskType:"Plan", taskState:"Stopped",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
-      { taskName: "taskFour", taskType:"OneShot", taskState:"Completed",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
+      { taskName: "taskOne", taskType:"OneShot", taskState:"Running",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK", resetBeforeBegin:"true"},
+      { taskName: "taskTwo", taskType:"Plan", taskState:"Executing",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK"},
+      { taskName: "taskThree", taskType:"Plan", taskState:"Stopped",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK"},
+      { taskName: "taskFour", taskType:"OneShot", taskState:"Completed",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK"},
     ],
     curTask: {},
   },
   created() {
+    this.curTask = this.taskList[0]
     this.refreshList()
 
     setInterval(()=>{
@@ -452,7 +455,7 @@ func thirdpartyDashboardSiteJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "thirdparty/dashboard/site.js", size: 3925, mode: os.FileMode(438), modTime: time.Unix(1528271254, 0)}
+	info := bindataFileInfo{name: "thirdparty/dashboard/site.js", size: 4079, mode: os.FileMode(438), modTime: time.Unix(1533129215, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

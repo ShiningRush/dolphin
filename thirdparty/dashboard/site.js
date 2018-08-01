@@ -3,14 +3,15 @@ var app = new Vue({
   data: {
     isLoading:false,
     taskList: [
-      { taskName: "taskOne", taskType:"OneShot", taskState:"Running",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
-      { taskName: "taskTwo", taskType:"Plan", taskState:"Executing",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
-      { taskName: "taskThree", taskType:"Plan", taskState:"Stopped",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
-      { taskName: "taskFour", taskType:"OneShot", taskState:"Completed",lastExecutedTime:"2017/05/16 15:00:46",lastExecuteCost:"50s"},
+      { taskName: "taskOne", taskType:"OneShot", taskState:"Running",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK", resetBeforeBegin:"true"},
+      { taskName: "taskTwo", taskType:"Plan", taskState:"Executing",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK"},
+      { taskName: "taskThree", taskType:"Plan", taskState:"Stopped",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK"},
+      { taskName: "taskFour", taskType:"OneShot", taskState:"Completed",lastExecuteTime:"2017/05/16 15:00:46",lastExecuteCost:"50s", lastExecusteState:"OK"},
     ],
     curTask: {},
   },
   created() {
+    this.curTask = this.taskList[0]
     this.refreshList()
 
     setInterval(()=>{
