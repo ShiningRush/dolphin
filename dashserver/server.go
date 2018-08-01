@@ -65,7 +65,7 @@ func serveAllTasks(w http.ResponseWriter, r *http.Request) error {
 			TaskType:         v.Type.ToString(),
 			PlanTime:         "(Cron format) " + v.PlanTime,
 			TaskState:        v.State.ToString(),
-			LastExecuteTime:  v.LastExecuteTime.Format("2006-01-02 15:04:05"),
+			LastExecuteTime:  v.LastExecuteTime.Local().Format("2006-01-02 15:04:05"),
 			LastExecuteState: v.LastExecuteState,
 			LastExecuteCost:  strconv.Itoa(v.LastExecuteCost) + "s",
 		}
