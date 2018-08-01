@@ -22,11 +22,12 @@ func SetTaskConfig(dir string, name string) {
 
 // EtlTask indicate a task operate etl
 type EtlTask struct {
-	Batch         Batch
-	Syncers       []Syncer
-	Type          TaskType
-	PlanTime      string // this time use cron format time
-	StatusChanged chan<- *EtlTask
+	Batch            Batch
+	Syncers          []Syncer
+	Type             TaskType
+	PlanTime         string // this time use cron format time
+	ResetBeforeBegin bool
+	StatusChanged    chan<- *EtlTask
 	Status
 }
 
@@ -79,6 +80,7 @@ func setTaskWithConfig(task *EtlTask) {
 
 	cfgType := v.GetString("taskConfig." + task.Batch.GetName() + ".type")
 	planTime := v.GetString("taskConfig." + task.Batch.GetName() + ".planTime")
+
 	if cfgType != "" {
 		switch cfgType {
 		case "Plan":
@@ -91,6 +93,8 @@ func setTaskWithConfig(task *EtlTask) {
 	if planTime != "" {
 		task.PlanTime = planTime
 	}
+
+	task.ResetBeforeBegin = v.GetBool("taskConfig." + task.Batch.GetName() + ".resetBeforeBegin")
 }
 
 // Execute a task
@@ -104,10 +108,13 @@ func (e *EtlTask) Execute() error {
 	e.LastExecuteState = ""
 	e.State = Executing
 	var allError error
-	if err := e.Batch.Reset(); err != nil {
-		e.LastExecuteState = "This task has something error when resetting, please check log"
-		errMsg := "We get a error when reset batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
-		allError = errors.New(errMsg)
+
+	if e.ResetBeforeBegin {
+		if err := e.Batch.Reset(); err != nil {
+			e.LastExecuteState = "This task has something error when resetting, please check log"
+			errMsg := "We get a error when reset batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
+			allError = errors.New(errMsg)
+		}
 	}
 
 	if err := e.Batch.Begin(e); err != nil {
