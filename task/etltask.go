@@ -22,14 +22,24 @@ func SetTaskConfig(dir string, name string) {
 
 // EtlTask indicate a task operate etl
 type EtlTask struct {
-	Batch            Batch
-	Syncers          []Syncer
-	Type             TaskType
+	Batch         Batch
+	Syncers       []Syncer
+	Type          TaskType
+	PlanTime      string // this time use cron format time
+	StatusChanged chan<- *EtlTask
+	Status
+}
+
+type Status struct {
 	State            TaskState
-	PlanTime         string // this time use cron format time
 	LastExecuteTime  time.Time
 	LastExecuteState string
 	LastExecuteCost  int
+}
+
+type TaskStatus struct {
+	TaskName string
+	Status
 }
 
 // Batch interface
@@ -116,6 +126,7 @@ func (e *EtlTask) Execute() error {
 		e.State = Running
 	}
 
+	e.notifyStatusChanged()
 	return allError
 }
 
@@ -128,6 +139,7 @@ func (e *EtlTask) Start() error {
 	e.StartSyncers()
 	e.State = Running
 
+	e.notifyStatusChanged()
 	return nil
 }
 
@@ -139,6 +151,8 @@ func (e *EtlTask) Stop() error {
 
 	e.StopSyncers()
 	e.State = Stopped
+
+	e.notifyStatusChanged()
 	return nil
 }
 
@@ -164,5 +178,19 @@ func (e *EtlTask) StopSyncers() {
 func (e *EtlTask) StartSyncers() {
 	for _, aSyncer := range e.Syncers {
 		aSyncer.Start()
+	}
+}
+
+func (e *EtlTask) GetTaskStatus() TaskStatus {
+	ts := TaskStatus{
+		TaskName: e.Batch.GetName(),
+	}
+	ts.Status = e.Status
+	return ts
+}
+
+func (e *EtlTask) notifyStatusChanged() {
+	if e.StatusChanged != nil {
+		e.StatusChanged <- e
 	}
 }

@@ -7,18 +7,31 @@ import (
 )
 
 type TaskManager struct {
-	etlTasks  map[string]*EtlTask
-	scheduler *cron.Cron
-	log       LogFunc
+	etlTasks          map[string]*EtlTask
+	scheduler         *cron.Cron
+	log               LogFunc
+	taskStatusChanged chan *EtlTask
+	taskStatusRepo    TaskStatusRepository
 }
 
 type LogFunc func(ll LogLevel, errMsg string)
+
+type TaskStatusRepository interface {
+	GetAll() ([]TaskStatus, error)
+	InsertOrUpdate(ts TaskStatus) error
+	RemoveLegacy(newTs map[string]*EtlTask) error
+}
 
 func NewTaskManager() *TaskManager {
 	tm := new(TaskManager)
 	tm.etlTasks = make(map[string]*EtlTask)
 	tm.scheduler = cron.New()
+	tm.taskStatusChanged = make(chan *EtlTask, 100)
 	return tm
+}
+
+func (t *TaskManager) SetRepo(repo TaskStatusRepository) {
+	t.taskStatusRepo = repo
 }
 
 func (t *TaskManager) SetLog(log LogFunc) {
@@ -31,6 +44,7 @@ func (t *TaskManager) GetAllTasks() map[string]*EtlTask {
 
 func (t *TaskManager) Add(aTask *EtlTask) *TaskManager {
 	if _, ok := t.etlTasks[aTask.Batch.GetName()]; !ok {
+		aTask.StatusChanged = t.taskStatusChanged
 		t.etlTasks[aTask.Batch.GetName()] = aTask
 	} else {
 		panic("there have existed a same task, name:" + aTask.Batch.GetName())
@@ -72,6 +86,26 @@ func (t *TaskManager) Execute(taskName string) error {
 }
 
 func (t *TaskManager) Build() error {
+	if err := t.dispatchTask(); err != nil {
+		return err
+	}
+
+	if t.taskStatusRepo != nil {
+		if err := t.initTaskStatus(); err != nil {
+			return errors.New("init task status error:" + err.Error())
+		}
+
+		if err := t.taskStatusRepo.RemoveLegacy(t.etlTasks); err != nil {
+			return errors.New("Remove legacy tasks error:" + err.Error())
+		}
+		go t.handleTaskStatusChanged()
+	}
+
+	t.scheduler.Start()
+	return nil
+}
+
+func (t *TaskManager) dispatchTask() error {
 	for _, v := range t.etlTasks {
 		if v.Type == OneShot {
 			if v.PlanTime != "" {
@@ -93,6 +127,28 @@ func (t *TaskManager) Build() error {
 		}
 	}
 
-	t.scheduler.Start()
 	return nil
+}
+
+func (t *TaskManager) initTaskStatus() error {
+	allTaskStatus, err := t.taskStatusRepo.GetAll()
+	if err != nil {
+		return err
+	}
+
+	for k, task := range t.etlTasks {
+		for _, ts := range allTaskStatus {
+			if k == ts.TaskName {
+				task.Status = ts.Status
+			}
+		}
+	}
+
+	return nil
+}
+
+func (t *TaskManager) handleTaskStatusChanged() {
+	for v := range t.taskStatusChanged {
+		t.taskStatusRepo.InsertOrUpdate(v.GetTaskStatus())
+	}
 }
