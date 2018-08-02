@@ -1,6 +1,6 @@
 package syncer
 
-// BlockSyncer you should compose this struct insdead of useing it
+// BlockSyncer you should compose this struct insdead of using it
 type BlockSyncer struct {
 	isStopped bool
 	startSig  chan bool

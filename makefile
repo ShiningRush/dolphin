@@ -11,7 +11,11 @@ build: gen
 	cd ./syncer && go build
 	cd ./dashserver && go build
 
+test: build
+	cd ./task && go test
+	cd ./syncer && go test
+
 clean:
 	rm -rf dist/dolphinui
 
-.PHONY: install build clean
+.PHONY: install build test clean

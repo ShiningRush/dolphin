@@ -17,7 +17,7 @@ func (c *TestExecuteTask_Mock_Batch) GetName() string {
 	return "TestExecuteTask_Mock_Batch"
 }
 
-func (c *TestExecuteTask_Mock_Batch) Begin() error {
+func (c *TestExecuteTask_Mock_Batch) Begin(e *EtlTask) error {
 	time.Sleep(time.Second * 2)
 	c.IsBegin = true
 
@@ -33,6 +33,7 @@ func (c *TestExecuteTask_Mock_Batch) Reset() error {
 func TestExecuteTask(t *testing.T) {
 	aBatch := new(TestExecuteTask_Mock_Batch)
 	aTask := NewTask(aBatch)
+	aTask.ResetBeforeBegin = true
 	aTask.Execute()
 	assert.True(t, aBatch.IsReset, "execute should execute reset")
 	assert.True(t, aBatch.IsBegin, "execute should execute begin")
@@ -49,8 +50,8 @@ func (c *TestExecuteTaskErr_Mock_Batch) GetName() string {
 	return "TestExecuteTaskErr_Mock_Batch"
 }
 
-func (c *TestExecuteTaskErr_Mock_Batch) Begin() error {
-	time.Sleep(time.Second * 2)
+func (c *TestExecuteTaskErr_Mock_Batch) Begin(e *EtlTask) error {
+	time.Sleep(time.Microsecond * 500)
 	c.IsBegin = true
 
 	return errors.New("Test err")
@@ -66,9 +67,9 @@ func TestExecuteTaskErr(t *testing.T) {
 	aBatch := new(TestExecuteTaskErr_Mock_Batch)
 	aTask := NewTask(aBatch)
 	aTask.Execute()
-	assert.True(t, aBatch.IsReset, "execute should execute reset")
+	assert.False(t, aBatch.IsReset, "execute should not execute reset")
 	assert.True(t, aBatch.IsBegin, "execute should execute begin")
-	assert.Equal(t, 2, aTask.LastExecuteCost)
+	assert.Equal(t, 0, aTask.LastExecuteCost)
 	assert.Equal(t, "This task has something error when beginning, please check log", aTask.LastExecuteState)
 }
 
@@ -80,8 +81,8 @@ func (c *TestStatusChanged_Mock_Batch) GetName() string {
 	return "TestStatusChanged_Mock_Batch"
 }
 
-func (c *TestStatusChanged_Mock_Batch) Begin() error {
-	time.Sleep(time.Second * 2)
+func (c *TestStatusChanged_Mock_Batch) Begin(e *EtlTask) error {
+	time.Sleep(time.Microsecond * 500)
 
 	return nil
 }

@@ -14,7 +14,7 @@ func (c *testBatch) GetName() string {
 	return "testBatch"
 }
 
-func (c *testBatch) Begin() error {
+func (c *testBatch) Begin(e *EtlTask) error {
 	fmt.Println("test")
 
 	return nil
@@ -58,7 +58,7 @@ func TestAddRepeatBatch(t *testing.T) {
 
 	tm := NewTaskManager()
 	tm.Add(aTask)
-	assert.Panics(t, func() { tm.Add(aTask) }, "Should happend panic")
+	assert.Panics(t, func() { tm.Add(aTask) }, "Should happened panic")
 }
 
 func TestBuildManager(t *testing.T) {
