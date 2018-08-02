@@ -5,6 +5,7 @@ type TaskWrapper struct {
 	component *EtlTask
 }
 
+// NewTaskWrapper return a wrapper for cron
 func NewTaskWrapper(log LogFunc, component *EtlTask) TaskWrapper {
 	tw := TaskWrapper{}
 	tw.log = log
@@ -12,6 +13,7 @@ func NewTaskWrapper(log LogFunc, component *EtlTask) TaskWrapper {
 	return tw
 }
 
+// Run it is for cron
 func (t TaskWrapper) Run() {
 	if err := t.component.Execute(); err != nil {
 		t.log(Error, "There are error when run task:"+err.Error())

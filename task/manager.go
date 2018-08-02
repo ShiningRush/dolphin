@@ -30,18 +30,22 @@ func NewTaskManager() *TaskManager {
 	return tm
 }
 
+// SetRepo if you need persist task status
 func (t *TaskManager) SetRepo(repo TaskStatusRepository) {
 	t.taskStatusRepo = repo
 }
 
+// SetLog if you want log err messages
 func (t *TaskManager) SetLog(log LogFunc) {
 	t.log = log
 }
 
+// GetAllTasks this method is commonly used by dashserver
 func (t *TaskManager) GetAllTasks() map[string]*EtlTask {
 	return t.etlTasks
 }
 
+// Add add a name unique task
 func (t *TaskManager) Add(aTask *EtlTask) *TaskManager {
 	if _, ok := t.etlTasks[aTask.Batch.GetName()]; !ok {
 		aTask.StatusChanged = t.taskStatusChanged
@@ -53,6 +57,7 @@ func (t *TaskManager) Add(aTask *EtlTask) *TaskManager {
 	return t
 }
 
+// Reset a task
 func (t *TaskManager) Reset(taskName string) error {
 	if tarTsk, ok := t.etlTasks[taskName]; ok {
 		return tarTsk.Batch.Reset()
@@ -60,6 +65,7 @@ func (t *TaskManager) Reset(taskName string) error {
 	return nil
 }
 
+// Start a task
 func (t *TaskManager) Start(taskName string) error {
 	if tarTsk, ok := t.etlTasks[taskName]; ok {
 		return tarTsk.Start()
@@ -68,6 +74,7 @@ func (t *TaskManager) Start(taskName string) error {
 	return nil
 }
 
+// Stop a task
 func (t *TaskManager) Stop(taskName string) error {
 	if tarTsk, ok := t.etlTasks[taskName]; ok {
 		return tarTsk.Stop()
@@ -75,6 +82,7 @@ func (t *TaskManager) Stop(taskName string) error {
 	return nil
 }
 
+// Execute a task
 func (t *TaskManager) Execute(taskName string) error {
 	if tarTsk, ok := t.etlTasks[taskName]; ok {
 		if tarTsk.State == Completed || tarTsk.State == Stopped || tarTsk.State == Executing {
@@ -87,6 +95,8 @@ func (t *TaskManager) Execute(taskName string) error {
 	return nil
 }
 
+// Build taskmanager, it will do oneshot  task first and add plan task to cron
+// then if you specified repo, will recover task status and remove unnecessary task status
 func (t *TaskManager) Build() error {
 	if err := t.dispatchTask(); err != nil {
 		return err
