@@ -50,7 +50,7 @@ type Batch interface {
 	Reset() error
 }
 
-// Syncer interface uset to sync data
+// Syncer must be singleton
 type Syncer interface {
 	Start()
 	Stop()

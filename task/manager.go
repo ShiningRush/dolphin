@@ -88,9 +88,9 @@ func (t *TaskManager) Execute(taskName string) error {
 		if tarTsk.State == Completed || tarTsk.State == Stopped || tarTsk.State == Executing {
 			return errors.New("Can not execute a unready task(running or init)")
 		}
-		if err := tarTsk.Execute(); err != nil {
-			t.log(Error, err.Error())
-		}
+
+		wp := NewTaskWrapper(t.log, tarTsk)
+		go wp.Run()
 	}
 	return nil
 }
