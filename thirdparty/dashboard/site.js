@@ -22,7 +22,7 @@ var app = new Vue({
     refreshList(){
       this.simpleAjax("/GetAllTasks").then((allTasks)=>{
         this.taskList = allTasks
-        if (!this.curTask.taskName){
+        if (!this.curTask.taskName || this.curTask.taskName == "taskOne"){
           this.curTask = this.taskList[0]
         }else{
           this.curTask = this.taskList.filter(p=>p.taskName == this.curTask.taskName)[0]

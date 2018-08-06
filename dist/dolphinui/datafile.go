@@ -334,7 +334,7 @@ var _thirdpartyDashboardSiteJs = []byte(`var app = new Vue({
     refreshList(){
       this.simpleAjax("/GetAllTasks").then((allTasks)=>{
         this.taskList = allTasks
-        if (!this.curTask.taskName){
+        if (!this.curTask.taskName || this.curTask.taskName == "taskOne"){
           this.curTask = this.taskList[0]
         }else{
           this.curTask = this.taskList.filter(p=>p.taskName == this.curTask.taskName)[0]
@@ -455,7 +455,7 @@ func thirdpartyDashboardSiteJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "thirdparty/dashboard/site.js", size: 4079, mode: os.FileMode(438), modTime: time.Unix(1533129215, 0)}
+	info := bindataFileInfo{name: "thirdparty/dashboard/site.js", size: 4117, mode: os.FileMode(438), modTime: time.Unix(1533546571, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
