@@ -99,7 +99,7 @@ func setTaskWithConfig(task *EtlTask) {
 
 // Execute a task
 func (e *EtlTask) Execute() error {
-	if e.State == Completed || e.State == Stopped || e.State == Executing {
+	if !e.IsAvailable() {
 		return nil
 	}
 
@@ -135,6 +135,18 @@ func (e *EtlTask) Execute() error {
 
 	e.notifyStatusChanged()
 	return allError
+}
+
+func (e *EtlTask) IsAvailable() bool {
+	if e.Type == Plan && e.State != Executing && e.State != Stopped {
+		return true
+	}
+
+	if e.Type == OneShot && e.State != Completed {
+		return true
+	}
+
+	return false
 }
 
 // Start a task
