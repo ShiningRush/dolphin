@@ -11,7 +11,7 @@
       </header>
       <div id="app" class="container">
         <section class="list">
-          <div class="taskItem" :class="[aTask.taskState.toLowerCase(), { active: aTask.taskName == curTask.taskName }, { error: aTask.lastExecuteState == 'This task has something error, please check log' }]" v-for="aTask in taskList" @click="clickTask(aTask)">
+          <div class="taskItem" :class="[aTask.taskState.toLowerCase(), { active: aTask.taskName == curTask.taskName }, { error: aTask.lastExecuteState != 'Everything is fine.' }]" v-for="aTask in taskList" @click="clickTask(aTask)">
             <span>{{ aTask.taskName }}</span>
           </div>
         </section>

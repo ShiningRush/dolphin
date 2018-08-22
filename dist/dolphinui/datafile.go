@@ -63,7 +63,7 @@ var _thirdpartyDashboardIndexHtml = []byte(`<!DOCTYPE html>
       </header>
       <div id="app" class="container">
         <section class="list">
-          <div class="taskItem" :class="[aTask.taskState.toLowerCase(), { active: aTask.taskName == curTask.taskName }, { error: aTask.lastExecuteState == 'This task has something error, please check log' }]" v-for="aTask in taskList" @click="clickTask(aTask)">
+          <div class="taskItem" :class="[aTask.taskState.toLowerCase(), { active: aTask.taskName == curTask.taskName }, { error: aTask.lastExecuteState != 'Everything is fine.' }]" v-for="aTask in taskList" @click="clickTask(aTask)">
             <span>{{ aTask.taskName }}</span>
           </div>
         </section>
@@ -109,7 +109,7 @@ func thirdpartyDashboardIndexHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "thirdparty/dashboard/index.html", size: 2210, mode: os.FileMode(438), modTime: time.Unix(1533129258, 0)}
+	info := bindataFileInfo{name: "thirdparty/dashboard/index.html", size: 2182, mode: os.FileMode(438), modTime: time.Unix(1534905959, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
