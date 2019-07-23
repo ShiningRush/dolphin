@@ -8,9 +8,9 @@ import (
 	"sort"
 	"strconv"
 
+	assetfs "github.com/elazarl/go-bindata-assetfs"
 	"github.com/shiningrush/dolphin"
 	"github.com/shiningrush/dolphin/dist/dolphinui"
-	assetfs "github.com/elazarl/go-bindata-assetfs"
 )
 
 // TaskStatus is return to web dashboard
@@ -26,7 +26,7 @@ type TaskStatus struct {
 }
 
 // Start server
-func Start(dashServerAddr *string) *http.Server {
+func Start(dashServerAddr string) *http.Server {
 	mux := http.NewServeMux()
 	serveDolphinUIFile(mux)
 	mux.Handle("/GetAllTasks", handlerWrapper(serveAllTasks))
@@ -35,9 +35,9 @@ func Start(dashServerAddr *string) *http.Server {
 	mux.Handle("/ExecuteTask", handlerWrapper(executeTask))
 	mux.Handle("/ResetTask", handlerWrapper(resetTask))
 
-	log.Println("dash server listen at :" + *dashServerAddr)
+	log.Println("dash server listen at :" + dashServerAddr)
 
-	hs := &http.Server{Addr: *dashServerAddr, Handler: mux}
+	hs := &http.Server{Addr: dashServerAddr, Handler: mux}
 	go func() {
 		if err := hs.ListenAndServe(); err != nil {
 			log.Println("We got a error when init dashserver, error:" + err.Error())
