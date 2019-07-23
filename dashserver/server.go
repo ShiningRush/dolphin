@@ -8,8 +8,8 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/ShiningRush/dolphin"
-	"github.com/ShiningRush/dolphin/dist/dolphinui"
+	"github.com/shiningrush/dolphin"
+	"github.com/shiningrush/dolphin/dist/dolphinui"
 	assetfs "github.com/elazarl/go-bindata-assetfs"
 )
 
