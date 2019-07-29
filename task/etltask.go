@@ -114,6 +114,7 @@ func (e *EtlTask) Execute() error {
 			e.LastExecuteState = "This task has something error when resetting, please check log"
 			errMsg := "We get a error when reset batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
 			allError = errors.New(errMsg)
+			goto update_metrics
 		}
 	}
 
@@ -123,6 +124,7 @@ func (e *EtlTask) Execute() error {
 		allError = errors.New(errMsg)
 	}
 
+update_metrics:
 	e.LastExecuteCost = int(time.Since(executeTime) / time.Second)
 	e.LastExecuteTime = executeTime
 	e.StartSyncers()
