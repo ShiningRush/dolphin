@@ -1,11 +1,11 @@
 package task
 
-type LogLevel uint
+type LogLevel string
 
 const (
-	Debug LogLevel = iota
-	Info
-	Error
+	Debug LogLevel = "Debug"
+	Info  LogLevel = "Info"
+	Error LogLevel = "Error"
 )
 
 // TaskType task type

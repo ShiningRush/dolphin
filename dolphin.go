@@ -2,12 +2,16 @@ package dolphin
 
 import (
 	"github.com/ShiningRush/dolphin/task"
+	"log"
 )
 
 var tm *task.TaskManager
 
 func init() {
 	tm = task.NewTaskManager()
+	tm.SetLog(func(ll task.LogLevel, errMsg string) {
+		log.Printf("[%s]: %s\n", ll, errMsg)
+	})
 }
 
 func SetLog(log task.LogFunc) {
