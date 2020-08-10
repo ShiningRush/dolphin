@@ -47,7 +47,7 @@ type TaskStatus struct {
 type Batch interface {
 	GetName() string
 	Begin(t *EtlTask) error
-	Reset() error
+	Reset(t *EtlTask) error
 }
 
 // Syncer must be singleton
@@ -110,7 +110,7 @@ func (e *EtlTask) Execute() error {
 	var allError error
 
 	if e.ResetBeforeBegin {
-		if err := e.Batch.Reset(); err != nil {
+		if err := e.Batch.Reset(e); err != nil {
 			e.LastExecuteState = "This task has something error when resetting, please check log"
 			errMsg := "We get a error when reset batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
 			allError = errors.New(errMsg)
@@ -183,9 +183,7 @@ func (e *EtlTask) Reset() error {
 		return errors.New("you can not reset a executing task")
 	}
 
-	e.Batch.Reset()
-
-	return nil
+	return e.Batch.Reset(e)
 }
 
 // StopSyncers all syncers

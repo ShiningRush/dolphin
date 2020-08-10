@@ -20,7 +20,7 @@ func (c *testBatch) Begin(e *EtlTask) error {
 	return nil
 }
 
-func (c *testBatch) Reset() error {
+func (c *testBatch) Reset(e *EtlTask) error {
 	return nil
 }
 

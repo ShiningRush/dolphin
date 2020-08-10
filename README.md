@@ -1,5 +1,5 @@
 # dolphin
-[![Go Report Card](https://goreportcard.com/badge/github.com/shiningrush/dolphin)](https://goreportcard.com/report/github.com/shiningrush/dolphin)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ShiningRush/dolphin)](https://goreportcard.com/report/github.com/ShiningRush/dolphin)
 
 dolphin 是一个轻量级的任务框架，主要用来解决微服务中那些复杂的跨服务统计查询与传统企业应用中的一些统计报表，你也可以把它当作一个普通的后台任务管理框架。
 
@@ -8,7 +8,7 @@ dolphin 是一个轻量级的任务框架，主要用来解决微服务中那些
 ### 安装
 
 ```
-go get -u github.com/shiningrush/dolphin
+go get -u github.com/ShiningRush/dolphin
 ```
 
 ### 使用
@@ -114,7 +114,7 @@ type TestSyncer struct {
 dolphin提供了一个Dashboard查看各个任务的执行状态和一些基本的控制，如果要启动它，使用以下的代码：
 
 ```
-import "github.com/shiningrush/dolphin/dashserver"
+import "github.com/ShiningRush/dolphin/dashserver"
 
 func XXX(){
   hs := dashserver.Start("0.0.0.0:6060")

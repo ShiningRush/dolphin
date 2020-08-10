@@ -1,12 +1,13 @@
-module github.com/shiningrush/dolphin
+module github.com/ShiningRush/dolphin
 
 go 1.12
 
 require (
 	github.com/davecgh/go-spew v1.1.0
-	github.com/elazarl/go-bindata-assetfs v1.0.0
+	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/hashicorp/hcl v0.0.0-20180404174102-ef8a98b0bbce
+	github.com/jteeuwen/go-bindata v3.0.7+incompatible // indirect
 	github.com/magiconair/properties v1.8.0
 	github.com/mitchellh/mapstructure v0.0.0-20180715050151-f15292f7a699
 	github.com/pelletier/go-toml v1.2.0

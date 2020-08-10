@@ -1,7 +1,7 @@
 package dolphin
 
 import (
-	"github.com/shiningrush/dolphin/task"
+	"github.com/ShiningRush/dolphin/task"
 )
 
 var tm *task.TaskManager

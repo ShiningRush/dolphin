@@ -60,7 +60,7 @@ func (t *TaskManager) Add(aTask *EtlTask) *TaskManager {
 // Reset a task
 func (t *TaskManager) Reset(taskName string) error {
 	if tarTsk, ok := t.etlTasks[taskName]; ok {
-		return tarTsk.Batch.Reset()
+		return tarTsk.Batch.Reset(tarTsk)
 	}
 	return nil
 }

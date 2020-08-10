@@ -24,7 +24,7 @@ func (c *TestExecuteTask_Mock_Batch) Begin(e *EtlTask) error {
 	return nil
 }
 
-func (c *TestExecuteTask_Mock_Batch) Reset() error {
+func (c *TestExecuteTask_Mock_Batch) Reset(e *EtlTask) error {
 	c.IsReset = true
 
 	return nil
@@ -57,7 +57,7 @@ func (c *TestExecuteTaskErr_Mock_Batch) Begin(e *EtlTask) error {
 	return errors.New("Test err")
 }
 
-func (c *TestExecuteTaskErr_Mock_Batch) Reset() error {
+func (c *TestExecuteTaskErr_Mock_Batch) Reset(e *EtlTask) error {
 	c.IsReset = true
 
 	return nil
@@ -87,7 +87,7 @@ func (c *TestStatusChanged_Mock_Batch) Begin(e *EtlTask) error {
 	return nil
 }
 
-func (c *TestStatusChanged_Mock_Batch) Reset() error {
+func (c *TestStatusChanged_Mock_Batch) Reset(e *EtlTask) error {
 	return nil
 }
 
