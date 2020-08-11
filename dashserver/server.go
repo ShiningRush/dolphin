@@ -39,7 +39,7 @@ func Start(dashServerAddr string) *http.Server {
 
 	hs := &http.Server{Addr: dashServerAddr, Handler: mux}
 	go func() {
-		if err := hs.ListenAndServe(); err != nil {
+		if err := hs.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Println("We got a error when init dashserver, error:" + err.Error())
 		}
 	}()
@@ -51,10 +51,13 @@ func serveDolphinUIFile(mux *http.ServeMux) {
 	fileServer := http.FileServer(&assetfs.AssetFS{
 		Asset:    dolphinui.Asset,
 		AssetDir: dolphinui.AssetDir,
-		Prefix:   "thirdparty/dashboard",
+		Prefix:   "thirdparty",
+		Fallback: "dashboard/index.html",
 	})
-	prefix := "/dashboard/"
-	mux.Handle(prefix, http.StripPrefix(prefix, fileServer))
+
+	mux.Handle("/dashboard", fileServer)
+	mux.Handle("/dashboard/", fileServer)
+	mux.Handle("/", http.RedirectHandler("/dashboard", http.StatusMovedPermanently))
 }
 
 func serveAllTasks(w http.ResponseWriter, r *http.Request) error {
