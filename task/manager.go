@@ -86,7 +86,7 @@ func (t *TaskManager) Stop(taskName string) error {
 func (t *TaskManager) Execute(taskName string) error {
 	if tarTsk, ok := t.etlTasks[taskName]; ok {
 		if tarTsk.State == Completed || tarTsk.State == Stopped || tarTsk.State == Executing {
-			return errors.New("Can not execute a unready task(running or init)")
+			return errors.New("can not execute a unready task(running or init)")
 		}
 
 		wp := NewTaskWrapper(t.log, tarTsk)
@@ -108,7 +108,7 @@ func (t *TaskManager) Build() error {
 		}
 
 		if err := t.taskStatusRepo.RemoveLegacy(t.etlTasks); err != nil {
-			return errors.New("Remove legacy tasks error:" + err.Error())
+			return errors.New("remove legacy tasks error:" + err.Error())
 		}
 		go t.handleTaskStatusChanged()
 	}

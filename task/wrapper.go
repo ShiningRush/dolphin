@@ -16,6 +16,6 @@ func NewTaskWrapper(log LogFunc, component *EtlTask) TaskWrapper {
 // Run it is for cron
 func (t TaskWrapper) Run() {
 	if err := t.component.Execute(); err != nil {
-		t.log(Error, "There are error when run task:"+err.Error())
+		t.log(Error, "there are error when run task:"+err.Error())
 	}
 }

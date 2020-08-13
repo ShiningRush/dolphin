@@ -75,7 +75,7 @@ func setTaskWithConfig(task *EtlTask) {
 	v.SetConfigName(cfgName)
 	v.AddConfigPath(cfgPath)
 	if err := v.ReadInConfig(); err != nil {
-		panic(fmt.Errorf("Fatal error when read config file: %s \n", err))
+		panic(fmt.Errorf("fatal error when read config file: %s \n", err))
 	}
 
 	cfgType := v.GetString("taskConfig." + task.Batch.GetName() + ".type")
@@ -111,16 +111,16 @@ func (e *EtlTask) Execute() error {
 
 	if e.ResetBeforeBegin {
 		if err := e.Batch.Reset(e); err != nil {
-			e.LastExecuteState = "This task has something error when resetting, please check log"
-			errMsg := "We get a error when reset batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
+			e.LastExecuteState = "this task has something error when resetting, please check log"
+			errMsg := "we get a error when reset batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
 			allError = errors.New(errMsg)
 			goto update_metrics
 		}
 	}
 
 	if err := e.Batch.Begin(e); err != nil {
-		e.LastExecuteState = "This task has something error when beginning, please check log"
-		errMsg := "We get a error when begin batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
+		e.LastExecuteState = "this task has something error when beginning, please check log"
+		errMsg := "we get a error when begin batch, batch name:" + e.Batch.GetName() + ", errors:" + err.Error()
 		allError = errors.New(errMsg)
 	}
 
